@@ -38,38 +38,31 @@ if gpus:
 def train():
     tr = GAN(caption_size=caption_size, image_wsize=image_wsize, image_hsize=image_hsize, noise_size=noise_size)
     checkpoint = tf.train.Checkpoint(generator=tr.generator, discriminator=tr.discriminator, g_optimizer=tr.g_optim,
-                                     d_optimizer=tr.d_optim, g_loss_meter=tr.g_loss_metrics,
+                                     d_optimizer=tr.d_optim, criter=tr.criterion, g_loss_meter=tr.g_loss_metrics,
                                      d_loss_meter=tr.d_loss_metrics)
     ckpt_manager = tf.train.CheckpointManager(checkpoint, model_file, max_to_keep=1)
-    checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
+    # checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
     data = DataSet(imagepath=image_path, tagfile=tag_file, image_wsize=image_wsize, image_hsize=image_hsize)
     epoch = -1
     start = time.time()
     while epoch < max_epoch:
         noise = np.random.uniform(-1, 1, [batch_size, noise_size])
-        noise2 = np.random.uniform(-1, 1, [batch_size, noise_size])
         real_images, caption = data.next_batch(batch_size=batch_size)
         real_images = tf.reshape(real_images, shape=(batch_size, image_wsize, image_hsize, 3))
 
-        with tf.GradientTape() as gen_tape, tf.GradientTape() as gen_tape2, tf.GradientTape() as disc_tape:
+        with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
             fake_images = tr.generator([noise, caption], training=True)
-            fake_images2 = tr.generator([noise2, caption], training=True)
             fake_output = tr.discriminator([fake_images, caption], training=True)
-            fake_output2 = tr.discriminator([fake_images2, caption], training=False)
             real_output = tr.discriminator([real_images, caption], training=True)
             disc_loss = tr.d_loss_fn(real_output, fake_output)
             gen_loss = tr.g_loss_fn(fake_output)
-            gen_loss2 = tr.g_loss_fn(fake_output2)
 
         generator_gradients = gen_tape.gradient(gen_loss, tr.generator.trainable_variables)
-        generator_gradients2 = gen_tape2.gradient(gen_loss2, tr.generator.trainable_variables)
         discriminator_gradients = disc_tape.gradient(disc_loss, tr.discriminator.trainable_variables)
 
         tr.g_optim.apply_gradients(zip(generator_gradients, tr.generator.trainable_variables))
-        tr.g_optim.apply_gradients(zip(generator_gradients2, tr.generator.trainable_variables))
         tr.d_optim.apply_gradients(zip(discriminator_gradients, tr.discriminator.trainable_variables))
         tr.g_loss_metrics(gen_loss)
-        tr.g_loss_metrics(gen_loss2)
         tr.d_loss_metrics(disc_loss)
 
         if epoch != data.N_epoch:
@@ -87,7 +80,7 @@ def train():
 def generate(rand=True):
     tr = GAN(caption_size=caption_size, image_wsize=image_wsize, image_hsize=image_hsize, noise_size=noise_size)
     checkpoint = tf.train.Checkpoint(generator=tr.generator, discriminator=tr.discriminator, g_optimizer=tr.g_optim,
-                                     d_optimizer=tr.d_optim, g_loss_meter=tr.g_loss_metrics,
+                                     d_optimizer=tr.d_optim, criter=tr.criterion, g_loss_meter=tr.g_loss_metrics,
                                      d_loss_meter=tr.d_loss_metrics)
     ckpt_manager = tf.train.CheckpointManager(checkpoint, model_file, max_to_keep=1)
     checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
