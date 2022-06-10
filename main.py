@@ -74,7 +74,7 @@ def train():
 
         if epoch != data.N_epoch:
             epoch = data.N_epoch
-            template = '[{}/{}] D_loss={:.5f} G_loss={:.5f} time: {} sec'
+            template = '[{}/{}] D_loss={} G_loss={} time: {} sec'
             print(template.format(epoch, max_epoch, tr.d_loss_metrics.result(),
                                   tr.g_loss_metrics.result(), time.time() - start))
             tr.g_loss_metrics.reset_states()
