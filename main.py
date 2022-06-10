@@ -97,7 +97,7 @@ def generate(rand=True):
         reader = csv.reader(f, delimiter=',')
         for idx, line in enumerate(reader):
             noises.append(line[1:1 + noise_size])
-            captions.append([-1.0, 1.0, 1.0])
+            captions.append(np.array([1.0, 1.0, 1.0]).astype(np.float32))
 
     generated_images = []
     i = 0
