@@ -90,7 +90,7 @@ def generate(rand=True):
                                      d_optimizer=tr.d_optim, g_loss_meter=tr.g_loss_metrics,
                                      d_loss_meter=tr.d_loss_metrics)
     ckpt_manager = tf.train.CheckpointManager(checkpoint, model_file, max_to_keep=1)
-    # checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
+    checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
     captions = []
     noises = []
     with open(testing_file, 'r') as f:
