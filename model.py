@@ -33,7 +33,6 @@ class GAN(object):
         X = tf.keras.layers.Flatten()(X)
         X = tf.concat([X, label], axis=1)
         X = tf.keras.layers.Dense(256)(X)
-        X = tf.keras.layers.BatchNormalization()(X)
         X = tf.keras.layers.LeakyReLU()(X)
         X = tf.keras.layers.Dense(1)(X)
         return tf.keras.models.Model(inputs=[image, label], outputs=X)
