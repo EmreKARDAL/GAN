@@ -7,9 +7,9 @@ class GAN(object):
         self.image_hsize = image_hsize
         self.caption_size = caption_size
         self.noise_size = noise_size
+        self.criterion = tf.keras.losses.MeanSquaredError()
         self.discriminator = self.make_discriminator()
         self.generator = self.make_generator()
-        self.criterion = tf.keras.losses.MeanSquaredError()
         self.g_optim = tf.keras.optimizers.RMSprop(0.0001)
         self.d_optim = tf.keras.optimizers.RMSprop(0.0001)
         self.g_loss_metrics = tf.metrics.Mean(name='g_loss')

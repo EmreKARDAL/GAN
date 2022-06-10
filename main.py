@@ -38,7 +38,7 @@ if gpus:
 def train():
     tr = GAN(caption_size=caption_size, image_wsize=image_wsize, image_hsize=image_hsize, noise_size=noise_size)
     checkpoint = tf.train.Checkpoint(generator=tr.generator, discriminator=tr.discriminator, g_optimizer=tr.g_optim,
-                                     d_optimizer=tr.d_optim, criter=tr.criterion, g_loss_meter=tr.g_loss_metrics,
+                                     d_optimizer=tr.d_optim, g_loss_meter=tr.g_loss_metrics,
                                      d_loss_meter=tr.d_loss_metrics)
     ckpt_manager = tf.train.CheckpointManager(checkpoint, model_file, max_to_keep=1)
     # checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
@@ -80,7 +80,7 @@ def train():
 def generate(rand=True):
     tr = GAN(caption_size=caption_size, image_wsize=image_wsize, image_hsize=image_hsize, noise_size=noise_size)
     checkpoint = tf.train.Checkpoint(generator=tr.generator, discriminator=tr.discriminator, g_optimizer=tr.g_optim,
-                                     d_optimizer=tr.d_optim, criter=tr.criterion, g_loss_meter=tr.g_loss_metrics,
+                                     d_optimizer=tr.d_optim, g_loss_meter=tr.g_loss_metrics,
                                      d_loss_meter=tr.d_loss_metrics)
     ckpt_manager = tf.train.CheckpointManager(checkpoint, model_file, max_to_keep=1)
     checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
