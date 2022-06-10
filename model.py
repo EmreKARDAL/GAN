@@ -34,7 +34,6 @@ class GAN(object):
         X = tf.concat([X, label], axis=1)
         X = tf.keras.layers.Dense(256)(X)
         X = tf.keras.layers.LeakyReLU()(X)
-        X = tf.keras.layers.Dropout(0.3)(X)
         X = tf.keras.layers.Dense(1)(X)
         return tf.keras.models.Model(inputs=[image, label], outputs=X)
 
@@ -55,7 +54,7 @@ class GAN(object):
         X = tf.keras.layers.Conv2DTranspose(128, 3, strides=2, padding='same')(X)
         X = tf.keras.layers.BatchNormalization()(X)
         X = tf.keras.layers.LeakyReLU()(X)
-        X = tf.keras.layers.Conv2DTranspose(3, 4, strides=2, padding='same', activation='tanh')(X)
+        X = tf.keras.layers.Conv2DTranspose(3, 1, strides=2, padding='same', activation='tanh')(X)
         return tf.keras.models.Model(inputs=[noise, label], outputs=X)
 
     def d_loss_fn(self, real_logits, fake_logits):
