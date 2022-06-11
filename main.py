@@ -43,8 +43,6 @@ def train():
     ckpt_manager = tf.train.CheckpointManager(checkpoint, model_file, max_to_keep=1)
     checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
     epoch = -1
-    tr.generator.summary()
-    tr.discriminator.summary()
     data = DataSet(imagepath=image_path, tagfile=tag_file, image_wsize=image_wsize, image_hsize=image_hsize)
     start = time.time()
     while epoch < max_epoch:
