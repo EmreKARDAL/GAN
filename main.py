@@ -78,8 +78,8 @@ def train():
         if epoch != data.N_epoch:
             for lyr in tr.discriminator.layers:
                 if type(lyr) == tf.keras.layers.GaussianNoise:
-                    if lyr.stddev > 0:
-                        lyr.stddev -= 0.0025
+                    if lyr.stddev >= 0.005:
+                        lyr.stddev -= 0.005
                     else:
                         lyr.stddev = 0
             epoch = data.N_epoch
