@@ -47,7 +47,7 @@ class GAN(object):
         X = tf.keras.layers.BatchNormalization()(X)
         X = tf.keras.layers.LeakyReLU()(X)
         X = tf.keras.layers.Reshape((4, 4, 512))(X)
-        X = tf.keras.layers.Conv2DTranspose(512, 5, strides=1, padding='same')(X)
+        X = tf.keras.layers.Conv2DTranspose(512, 5, strides=2, padding='same')(X)
         X = tf.keras.layers.BatchNormalization()(X)
         X = tf.keras.layers.LeakyReLU()(X)
         X = tf.keras.layers.Conv2DTranspose(256, 5, strides=2, padding='same')(X)
