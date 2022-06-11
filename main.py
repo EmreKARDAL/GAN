@@ -46,31 +46,47 @@ def train():
     epoch = -1
     start = time.time()
     while epoch < max_epoch:
-        noise = np.random.uniform(-1, 1, [batch_size, noise_size])
-        noise2 = np.random.uniform(-1, 1, [batch_size, noise_size])
         real_images, caption = data.next_batch(batch_size=batch_size)
         real_images = tf.reshape(real_images, shape=(batch_size, image_wsize, image_hsize, 3))
 
-        with tf.GradientTape() as gen_tape, tf.GradientTape() as gen_tape2, tf.GradientTape() as disc_tape:
-            fake_images = tr.generator([noise, caption], training=True)
-            fake_images2 = tr.generator([noise2, caption], training=True)
-            fake_output = tr.discriminator([fake_images, caption], training=True)
-            fake_output2 = tr.discriminator([fake_images2, caption], training=False)
-            real_output = tr.discriminator([real_images, caption], training=True)
-            disc_loss = tr.d_loss_fn(real_output, fake_output)
-            gen_loss = tr.g_loss_fn(fake_output)
-            gen_loss2 = tr.g_loss_fn(fake_output2)
+        if epoch > 8:
+            s = 0
+            while s < 2:
+                with tf.GradientTape() as gen_tape:
+                    noise = np.random.uniform(-1, 1, [batch_size, noise_size])
+                    fake_images = tr.generator([noise, caption], training=True)
+                    fake_output = tr.discriminator([fake_images, caption], training=False)
+                    gen_loss = tr.g_loss_fn(fake_output)
 
-        generator_gradients = gen_tape.gradient(gen_loss, tr.generator.trainable_variables)
-        generator_gradients2 = gen_tape2.gradient(gen_loss2, tr.generator.trainable_variables)
-        discriminator_gradients = disc_tape.gradient(disc_loss, tr.discriminator.trainable_variables)
+                generator_gradients = gen_tape.gradient(gen_loss, tr.generator.trainable_variables)
+                tr.g_optim.apply_gradients(zip(generator_gradients, tr.generator.trainable_variables))
+                tr.g_loss_metrics(gen_loss)
+                s += 1
+            with tf.GradientTape() as disc_tape:
+                fake_images = tr.generator([noise, caption], training=False)
+                fake_output = tr.discriminator([fake_images, caption], training=True)
+                real_output = tr.discriminator([real_images, caption], training=True)
+                disc_loss = tr.d_loss_fn(real_output, fake_output)
 
-        tr.g_optim.apply_gradients(zip(generator_gradients, tr.generator.trainable_variables))
-        tr.g_optim.apply_gradients(zip(generator_gradients2, tr.generator.trainable_variables))
-        tr.d_optim.apply_gradients(zip(discriminator_gradients, tr.discriminator.trainable_variables))
-        tr.g_loss_metrics(gen_loss)
-        tr.g_loss_metrics(gen_loss2)
-        tr.d_loss_metrics(disc_loss)
+            discriminator_gradients = disc_tape.gradient(disc_loss, tr.discriminator.trainable_variables)
+            tr.d_optim.apply_gradients(zip(discriminator_gradients, tr.discriminator.trainable_variables))
+            tr.d_loss_metrics(disc_loss)
+        else:
+            with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
+                noise = np.random.uniform(-1, 1, [batch_size, noise_size])
+                fake_images = tr.generator([noise, caption], training=True)
+                fake_output = tr.discriminator([fake_images, caption], training=True)
+                real_output = tr.discriminator([real_images, caption], training=True)
+                disc_loss = tr.d_loss_fn(real_output, fake_output)
+                gen_loss = tr.g_loss_fn(fake_output)
+
+            generator_gradients = gen_tape.gradient(gen_loss, tr.generator.trainable_variables)
+            discriminator_gradients = disc_tape.gradient(disc_loss, tr.discriminator.trainable_variables)
+
+            tr.g_optim.apply_gradients(zip(generator_gradients, tr.generator.trainable_variables))
+            tr.d_optim.apply_gradients(zip(discriminator_gradients, tr.discriminator.trainable_variables))
+            tr.g_loss_metrics(gen_loss)
+            tr.d_loss_metrics(disc_loss)
 
         if epoch != data.N_epoch:
             epoch = data.N_epoch
@@ -117,7 +133,7 @@ def generate(rand=True):
         else:
             noise = np.array([noise]).astype(np.float32)
             caption = np.array([vec]).astype(np.float32)
-        generated_images.append(tr.generator([noise, caption]))
+        generated_images.append(tr.generator([noise, caption], training=False))
 
     for i, images in enumerate(generated_images, start=1):
         for j, image in enumerate(images, start=1):
