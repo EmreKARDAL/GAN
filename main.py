@@ -48,21 +48,6 @@ def train():
     while epoch < max_epoch:
 
         real_images, caption = data.next_batch(batch_size=batch_size)
-
-        if epoch > 0:
-            s = 0
-            while s > 2:
-                with tf.GradientTape() as gen_tape:
-                    noise = np.random.uniform(-1, 1, [batch_size, noise_size])
-                    fake_images = tr.generator([noise, caption], training=True)
-                    fake_output = tr.discriminator([fake_images, caption], training=False)
-                    gen_loss = tr.g_loss_fn(fake_output)
-
-                generator_gradients = gen_tape.gradient(gen_loss, tr.generator.trainable_variables)
-                tr.g_optim.apply_gradients(zip(generator_gradients, tr.generator.trainable_variables))
-                tr.g_loss_metrics(gen_loss)
-                s += 1
-
         noise = np.random.uniform(-1, 1, [batch_size, noise_size])
         real_images = tf.reshape(real_images, shape=(batch_size, image_wsize, image_hsize, 3))
         with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
@@ -74,8 +59,10 @@ def train():
 
         generator_gradients = gen_tape.gradient(gen_loss, tr.generator.trainable_variables)
         discriminator_gradients = disc_tape.gradient(disc_loss, tr.discriminator.trainable_variables)
+
         tr.g_optim.apply_gradients(zip(generator_gradients, tr.generator.trainable_variables))
         tr.d_optim.apply_gradients(zip(discriminator_gradients, tr.discriminator.trainable_variables))
+
         tr.g_loss_metrics(gen_loss)
         tr.d_loss_metrics(disc_loss)
 
