@@ -69,7 +69,7 @@ def train():
         for lyr in tr.discriminator.layers:
             if type(lyr) == tf.keras.layers.GaussianNoise:
                 if lyr.stddev > 0:
-                    lyr.stddev -= 0.01
+                    lyr.stddev -= 0.001
                 else:
                     lyr.stddev = 0
 
