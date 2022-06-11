@@ -73,7 +73,6 @@ def train():
 
         generator_gradients = gen_tape.gradient(gen_loss, tr.generator.trainable_variables)
         tr.g_optim.apply_gradients(zip(generator_gradients, tr.generator.trainable_variables))
-
         tr.g_loss_metrics(gen_loss)
 
         if epoch != data.N_epoch:
