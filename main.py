@@ -49,7 +49,7 @@ def train():
         real_images, caption = data.next_batch(batch_size=batch_size)
         real_images = tf.reshape(real_images, shape=(batch_size, image_wsize, image_hsize, 3))
 
-        if epoch > 8:
+        if epoch > 3:
             s = 0
             while s < 2:
                 with tf.GradientTape() as gen_tape:
