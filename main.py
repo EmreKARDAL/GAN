@@ -42,8 +42,8 @@ def train():
                                      d_loss_meter=tr.d_loss_metrics)
     ckpt_manager = tf.train.CheckpointManager(checkpoint, model_file, max_to_keep=1)
     checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
-    data = DataSet(imagepath=image_path, tagfile=tag_file, image_wsize=image_wsize, image_hsize=image_hsize)
     epoch = -1
+    data = DataSet(imagepath=image_path, tagfile=tag_file, image_wsize=image_wsize, image_hsize=image_hsize)
     start = time.time()
     while epoch < max_epoch:
 
