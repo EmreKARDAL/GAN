@@ -66,15 +66,6 @@ def train():
         tr.g_loss_metrics(gen_loss)
         tr.d_loss_metrics(disc_loss)
 
-        with tf.GradientTape() as gen_tape:
-            fake_images = tr.generator([noise, caption], training=True)
-            fake_output = tr.discriminator([fake_images, caption], training=False)
-            gen_loss = tr.g_loss_fn(fake_output)
-
-        generator_gradients = gen_tape.gradient(gen_loss, tr.generator.trainable_variables)
-        tr.g_optim.apply_gradients(zip(generator_gradients, tr.generator.trainable_variables))
-        tr.g_loss_metrics(gen_loss)
-
         if epoch != data.N_epoch:
             epoch = data.N_epoch
             template = '[{}/{}] D_loss={} G_loss={} time: {} sec'
