@@ -66,6 +66,13 @@ def train():
         tr.g_loss_metrics(gen_loss)
         tr.d_loss_metrics(disc_loss)
 
+        for lyr in tr.discriminator.layers:
+            if type(lyr) == tf.keras.layers.GaussianNoise:
+                if lyr.stddev > 0:
+                    lyr.stddev -= 0.05
+                else:
+                    lyr.stddev = 0
+
         if epoch != data.N_epoch:
             epoch = data.N_epoch
             template = '[{}/{}] D_loss={} G_loss={} time: {} sec'
