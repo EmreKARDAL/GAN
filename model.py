@@ -7,10 +7,10 @@ class GAN(object):
         self.image_hsize = image_hsize
         self.caption_size = caption_size
         self.noise_size = noise_size
-        self.criterion = tf.keras.losses.MeanSquaredError()
+        self.criterion = tf.keras.losses.BinaryCrossentropy()
         self.discriminator = self.make_discriminator()
         self.generator = self.make_generator()
-        self.g_optim = tf.keras.optimizers.SGD(learning_rate=0.0002)
+        self.g_optim = tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)
         self.d_optim = tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)
         self.g_loss_metrics = tf.metrics.Mean(name='g_loss')
         self.d_loss_metrics = tf.metrics.Mean(name='d_loss')
