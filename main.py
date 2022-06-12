@@ -42,7 +42,7 @@ def train():
                                      d_loss_meter=tr.d_loss_metrics)
     ckpt_manager = tf.train.CheckpointManager(checkpoint, model_file, max_to_keep=1)
     checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
-    epoch = -1
+    epoch = 0
     '''
     tr.discriminator.summary()
     tr.generator.summary()
@@ -77,10 +77,10 @@ def train():
                         lyr.stddev -= 0.001
                     else:
                         lyr.stddev = 0
-            epoch = data.N_epoch
             template = '[{}/{}] D_loss={} G_loss={} time: {} sec'
             print(template.format(epoch, max_epoch, tr.d_loss_metrics.result(),
                                   tr.g_loss_metrics.result(), time.time() - start))
+            epoch = data.N_epoch
             tr.g_loss_metrics.reset_states()
             tr.d_loss_metrics.reset_states()
             ckpt_manager.save()
