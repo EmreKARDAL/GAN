@@ -72,7 +72,7 @@ def train():
 
         with tf.GradientTape() as gen_tape:
             fake_images = tr.generator([noise, caption], training=True)
-            fake_output = tr.discriminator([fake_images, caption], training=True)
+            fake_output = tr.discriminator([fake_images, caption], training=False)
             gen_loss = tr.g_loss_fn(fake_output)
 
         generator_gradients = gen_tape.gradient(gen_loss, tr.generator.trainable_variables)
