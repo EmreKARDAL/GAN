@@ -11,7 +11,7 @@ class GAN(object):
         self.discriminator = self.make_discriminator()
         self.generator = self.make_generator()
         self.g_optim = tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)
-        self.d_optim = tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)
+        self.d_optim = tf.keras.optimizers.Adam(learning_rate=0.0001, beta_1=0.9)
         self.g_loss_metrics = tf.metrics.Mean(name='g_loss')
         self.d_loss_metrics = tf.metrics.Mean(name='d_loss')
 
