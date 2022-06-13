@@ -73,8 +73,8 @@ def train():
         if epoch != data.N_epoch:
             for lyr in tr.discriminator.layers:
                 if type(lyr) == tf.keras.layers.GaussianNoise:
-                    if lyr.stddev >= 0.001:
-                        lyr.stddev -= 0.001
+                    if lyr.stddev >= 0.016:
+                        lyr.stddev -= 0.016
                     else:
                         lyr.stddev = 0
             template = '[{}/{}] D_loss={} G_loss={} time: {} sec'
