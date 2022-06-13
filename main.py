@@ -123,7 +123,7 @@ def generate(rand=True):
 
     for i, images in enumerate(generated_images, start=1):
         for j, image in enumerate(images, start=1):
-            img = Image.fromarray((image.numpy() * 255.0).astype(np.uint8)).resize((oimage_wsize, oimage_hsize),
+            img = Image.fromarray(((image.numpy() + 1) * 127.5).astype(np.uint8)).resize((oimage_wsize, oimage_hsize),
                                                                                          Image.LANCZOS)
             img.save(os.path.join(sample_path, 'sample_{}_{}.jpg'.format(i, j)))
 
