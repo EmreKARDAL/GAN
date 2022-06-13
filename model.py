@@ -10,8 +10,8 @@ class GAN(object):
         self.criterion = tf.keras.losses.MeanSquaredError()
         self.discriminator = self.make_discriminator()
         self.generator = self.make_generator()
-        self.g_optim = tf.keras.optimizers.SGD(learning_rate=0.0002, momentum=0.9)
-        self.d_optim = tf.keras.optimizers.SGD(learning_rate=0.0001, momentum=0.9)
+        self.g_optim = tf.keras.optimizers.SGD(learning_rate=0.0002, momentum=0.9, nesterov=True)
+        self.d_optim = tf.keras.optimizers.SGD(learning_rate=0.0001, momentum=0.9, nesterov=True)
         self.g_loss_metrics = tf.metrics.Mean(name='g_loss')
         self.d_loss_metrics = tf.metrics.Mean(name='d_loss')
 
