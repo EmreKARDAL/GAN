@@ -23,7 +23,7 @@ image_hsize = 64
 oimage_wsize = 178
 oimage_hsize = 178
 caption_size = 3
-noise_size = 1024
+noise_size = 128
 max_epoch = 1000
 
 gpus = tf.config.experimental.list_physical_devices('GPU')
