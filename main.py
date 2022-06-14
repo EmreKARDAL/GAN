@@ -43,7 +43,7 @@ def train():
     ckpt_manager = tf.train.CheckpointManager(checkpoint, model_file, max_to_keep=1)
     checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
     epoch = 0
-    # '''
+    '''
     tr.discriminator.summary()
     tr.generator.summary()
     # '''
