@@ -17,13 +17,13 @@ tag_file = 'list_attr_celeba.csv'
 testing_file = 'test.csv'
 
 generate_num = 1
-batch_size = 64
-image_wsize = 64
-image_hsize = 64
+batch_size = 32
+image_wsize = 128
+image_hsize = 128
 oimage_wsize = 178
 oimage_hsize = 178
 caption_size = 3
-noise_size = 4096
+noise_size = 128
 max_epoch = 1000
 
 gpus = tf.config.experimental.list_physical_devices('GPU')
