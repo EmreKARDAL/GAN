@@ -52,7 +52,7 @@ def train():
     while epoch < max_epoch:
 
         real_images, caption = data.next_batch(batch_size=batch_size)
-        noise = np.random.uniform(-1, 1, [batch_size, noise_size])
+        noise = np.random.uniform(0, 1, [batch_size, noise_size])
         real_images = tf.reshape(real_images, shape=(batch_size, image_wsize, image_hsize, 3))
         with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
             fake_images = tr.generator([noise, caption], training=True)
@@ -110,7 +110,7 @@ def generate(rand=True):
         if i > generate_num:
             break
         if rand:
-            noise = np.random.uniform(-1, 1, [1, noise_size])
+            noise = np.random.uniform(0, 1, [1, noise_size])
             tmp = [0.0]
             caption = np.array([[-1.0, 1.0, 1.0]]).astype(np.float32)
             with open(testing_file, 'w') as f:
