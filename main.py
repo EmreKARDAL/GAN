@@ -23,7 +23,7 @@ image_hsize = 64
 oimage_wsize = 178
 oimage_hsize = 178
 caption_size = 3
-noise_size = 128
+noise_size = 4096
 max_epoch = 1000
 
 gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -43,7 +43,7 @@ def train():
     ckpt_manager = tf.train.CheckpointManager(checkpoint, model_file, max_to_keep=1)
     checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
     epoch = 0
-    '''
+    # '''
     tr.discriminator.summary()
     tr.generator.summary()
     # '''
