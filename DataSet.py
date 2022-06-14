@@ -35,9 +35,10 @@ class DataSet(object):
                     if check:
                         filename = os.path.join(imagepath, line[0])
                         im1 = Image.open(filename)
-                        im2 = ImageOps.fit(im1, size=(image_wsize, image_hsize), method=Image.LANCZOS,
+                        img = ImageOps.fit(im1, size=(image_wsize, image_hsize), method=Image.LANCZOS,
                                            centering=(0.5, 0.5)).convert('RGB')
-                        img = np.array(im2, dtype=np.uint8)
+                        img = np.array(img, dtype=np.uint8)
+                        im1.close()
                         self._images.append((img.astype(np.float32) / 127.5) - 1)
                         self._tags.append([line[5], line[21], line[25]])
                     if counter[0] == 2033 and counter[1] == 2033 and counter[2] == 2033 and counter[3] == 2033:
