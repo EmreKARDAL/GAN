@@ -7,7 +7,7 @@ class GAN(object):
         self.image_hsize = image_hsize
         self.caption_size = caption_size
         self.noise_size = noise_size
-        self.criterion = tf.keras.losses.MeanSquaredError()
+        self.criterion = tf.keras.losses.BinaryCrossentropy()
         self.discriminator = self.make_discriminator()
         self.generator = self.make_generator()
         self.g_optim = tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)
@@ -38,7 +38,7 @@ class GAN(object):
         X = tf.concat([X, label], axis=1)
         X = tf.keras.layers.Dense(256, use_bias=False)(X)
         X = tf.keras.layers.LeakyReLU()(X)
-        X = tf.keras.layers.Dense(1, use_bias=False)(X)
+        X = tf.keras.layers.Dense(1, use_bias=False, activation='sigmoid')(X)
         return tf.keras.models.Model(inputs=[image, label], outputs=X)
 
     def make_generator(self):
