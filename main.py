@@ -77,9 +77,10 @@ def train():
                         lyr.stddev -= 0.01
                     elif lyr.stddev < 0.0:
                         lyr.stddev = 0
-            template = '[{}/{}] D_loss={} G_loss={} time: {} sec'
-            print(template.format(epoch, max_epoch, tr.d_loss_metrics.result(),
-                                  tr.g_loss_metrics.result(), time.time() - start))
+            print('[{:4d}/{:4d}] D_loss={:2.17f} G_loss={:2.17f} time: {:3.17f} sec'.format(epoch, max_epoch,
+                                                                                            tr.d_loss_metrics.result(),
+                                                                                            tr.g_loss_metrics.result(),
+                                                                                            time.time() - start))
             epoch = data.N_epoch
             tr.g_loss_metrics.reset_states()
             tr.d_loss_metrics.reset_states()
