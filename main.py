@@ -77,7 +77,7 @@ def train():
                         lyr.stddev -= 0.01
                     elif lyr.stddev < 0.0:
                         lyr.stddev = 0
-            print('[{:4d}/{:4d}] D_loss={:2.17f} G_loss={:2.17f} time: {:3.17f} sec'.format(epoch, max_epoch,
+            print('[{}/{:4d}] D_loss={:2.17f} G_loss={:2.17f} time: {:3.17f} sec'.format(epoch, max_epoch,
                                                                                             tr.d_loss_metrics.result(),
                                                                                             tr.g_loss_metrics.result(),
                                                                                             time.time() - start))
