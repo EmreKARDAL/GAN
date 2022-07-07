@@ -17,13 +17,13 @@ tag_file = 'list_attr_celeba.csv'
 testing_file = 'test.csv'
 
 generate_num = 1
-batch_size = 128
-image_wsize = 64
-image_hsize = 64
-oimage_wsize = 178
-oimage_hsize = 178
+batch_size = 32
+image_wsize = 128
+image_hsize = 128
+oimage_wsize = 128
+oimage_hsize = 128
 caption_size = 3
-noise_size = 256
+noise_size = 16384
 max_epoch = 1000
 
 gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -43,7 +43,7 @@ def train():
     ckpt_manager = tf.train.CheckpointManager(checkpoint, model_file, max_to_keep=1)
     checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
     epoch = 0
-    '''
+    # '''
     tr.discriminator.summary()
     tr.generator.summary()
     # '''
