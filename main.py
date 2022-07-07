@@ -138,4 +138,4 @@ if __name__ == "__main__":
     if args[0] == '-train':
         train()
     elif args[0] == '-generate':
-        generate(rand=True)
+        generate(rand=False)
