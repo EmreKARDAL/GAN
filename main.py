@@ -17,7 +17,7 @@ tag_file = 'list_attr_celeba.csv'
 testing_file = 'test.csv'
 
 generate_num = 1
-batch_size = 32
+batch_size = 16
 image_wsize = 128
 image_hsize = 128
 oimage_wsize = 128
@@ -43,7 +43,7 @@ def train():
     ckpt_manager = tf.train.CheckpointManager(checkpoint, model_file, max_to_keep=1)
     checkpoint.restore(ckpt_manager.latest_checkpoint).expect_partial()
     epoch = 0
-    # '''
+    '''
     tr.discriminator.summary()
     tr.generator.summary()
     # '''
